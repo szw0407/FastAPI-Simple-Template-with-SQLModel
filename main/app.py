@@ -1,5 +1,5 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, HTTPException, APIRouter
+from fastapi import FastAPI, HTTPException
 
 from . import user, seller, items
 from .dependencies import *
@@ -45,3 +45,4 @@ async def get_token(form_data: OAuth2PasswordRequestForm = Depends(), session: S
         data={"sub": user.email}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
+

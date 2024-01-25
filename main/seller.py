@@ -22,10 +22,10 @@ async def read_seller(id: int):
             raise HTTPException(status_code=404, detail="Seller not found")
         items = session.exec(select(Item).where(Item.owner_id == id))
         return SellerInfo(
-            email = user.email,
-            display_name = user.display_name,
-            role = user.role,
-            items= [_ for _ in items]
+            email=user.email,
+            display_name=user.display_name,
+            role=user.role,
+            items=list(items),
         )
     
 @router.get("/", response_model=List[UserRead])
@@ -34,8 +34,9 @@ async def read_sellers(skip: int = 0, limit: int = 100):
     Get all sellers
     """
     with Session(engine) as session:
-        sellers = session.exec(select(User).where(User.role == "seller").offset(skip).limit(limit)).all()
-        return sellers
+        return session.exec(
+            select(User).where(User.role == "seller").offset(skip).limit(limit)
+        ).all()
     
 @router.get("/{id}/items", response_model=List[ItemRead])
 async def read_seller_items(id: int, skip: int = 0, limit: int = 100):
@@ -43,9 +44,13 @@ async def read_seller_items(id: int, skip: int = 0, limit: int = 100):
     Get seller items by id
     """
     with Session(engine) as session:
-        seller = session.get(User, id)
-        if not seller:
+        if session.get(User, id):
+            return session.exec(
+                select(Item)
+                .where(Item.owner_id == id)
+                .offset(skip)
+                .limit(limit)
+            ).all()
+        else:
             raise HTTPException(status_code=404, detail="Seller not found")
-        items = session.exec(select(Item).where(Item.owner_id == id).offset(skip).limit(limit)).all()
-        return items
     

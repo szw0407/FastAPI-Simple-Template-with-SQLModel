@@ -53,10 +53,10 @@ async def read_user(id: int, depend_user: UserRead = Depends(get_current_active_
     if depend_user.role != "admin" and depend_user.id != id:
         raise HTTPException(status_code=403, detail="You don't have permission to get this user")
     with Session(engine) as session:
-        user = session.get(User, id)
-        if not user:
+        if user := session.get(User, id):
+            return user
+        else:
             raise HTTPException(status_code=404, detail="User not found")
-        return user
     
 @router.get("/", tags=["admin"], response_model=List[UserRead])
 async def read_users_admin(skip: int = 0, limit: int = 100, admin = Depends(get_current_active_user)):
@@ -66,8 +66,7 @@ async def read_users_admin(skip: int = 0, limit: int = 100, admin = Depends(get_
     if admin.role != "admin":
         raise HTTPException(status_code=403, detail="You don't have permission to get all users")
     with Session(engine) as session:
-        users = session.exec(select(User).offset(skip).limit(limit)).all()
-        return users
+        return session.exec(select(User).offset(skip).limit(limit)).all()
 
 @router.patch("/{id}", response_model=UserCreate, tags=["admin"])
 async def update_user(id: int, user: UserModify, depend_user: UserRead = Depends(get_current_active_user)):

@@ -32,9 +32,7 @@ async def authenticate_user(email: str, password: str):
     user: User = await get_user_by_email(email)  # due to the async nature, we need to await the result
     if not user:
         return False
-    if not verify_password(password, user.password):
-        return False
-    return user
+    return user if verify_password(password, user.password) else False
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token") 
 
@@ -50,9 +48,8 @@ def create_access_token(data: dict, expires_delta: timedelta| None = None):
         expire = datetime.now(timezone.utc) + expires_delta
     else:
         expire = datetime.now(timezone.utc) + timedelta(minutes=15)
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+    to_encode |= {"exp": expire}
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
@@ -67,8 +64,8 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         if username is None:
             raise credentials_exception
         token_data = TokenData(username=username)
-    except JWTError:
-        raise credentials_exception
+    except JWTError as e:
+        raise credentials_exception from e
     user = await get_user_by_email(email=token_data.username)
     if user is None:
         raise credentials_exception

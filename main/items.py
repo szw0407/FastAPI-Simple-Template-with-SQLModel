@@ -21,8 +21,7 @@ async def read_items(skip: int = 0, limit: int = 100, admin = Depends(get_curren
     if admin.role != "admin":
         raise HTTPException(status_code=403, detail="You don't have permission to get all items")
     with Session(engine) as session:
-        items = session.exec(select(Item).offset(skip).limit(limit)).all()
-        return items
+        return session.exec(select(Item).offset(skip).limit(limit)).all()
     
 @router.post("/", response_model=Item)
 async def create_item(item: ItemCreate, me = Depends(get_current_active_user)):
