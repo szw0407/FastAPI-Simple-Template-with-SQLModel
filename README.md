@@ -1,6 +1,6 @@
 # FastAPI-simple-Template-with-SQLmodel
 
-A simple example of FastAPI.
+A simple example of FastAPI. There are many examples of using FastAPI, but few are concise enough, while the ones using the SQLmodel are basically non-existent. I choose SQLmodel instead of SQLAlchemy because the latter is much too complex and hard to learn. SQLmodel is created by the author of FastAPI, so it should work extremely well with FastAPI. I suppose later the documentation of FastAPI will use SQLmodel instead of SQLAlchemy, but now the documentations on SQLmodel are still too few.
 
 In this example, we will create a service of a online store.
 
@@ -9,6 +9,8 @@ Users can register, login, and see the information of the items.
 Sellers can do all the things that users can do, and also can add, update, and delete items.
 
 Admins can do all the things that sellers can do, and also can add, update, and delete users.
+
+**WARN**: This is just a simple example, not recommended to directly use in production. You should add more security measures, such as using HTTPS, using a more secure password hashing algorithm, and most importantly, **DO NOT** use the secret key in production same as the one here in the example.
 
 ## Requirements
 
