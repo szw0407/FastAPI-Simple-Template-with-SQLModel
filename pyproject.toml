@@ -15,13 +15,15 @@ requires-python = ">=3.10"
 readme = "README.md"
 license = {text = "MIT"}
 keywords = ["fastapi", "sqlmodel", "JWT", "authentication", "authorization"]
-entry-points = { console_scripts = { start-server = "main.__main__:main" } }  # bad practice, but it works
+
+[project.scripts]
+start-server = "main:main"
 
 [tool.pdm]
 distribution = true
 
 [tool.pdm.scripts]
-main = "uvicorn main:app --reload"
+start = "uvicorn main:app --reload"
 
 [build-system]
 requires = ["pdm-backend"]
