@@ -1,0 +1,20 @@
+[project]
+name = "FastAPI-simple-example"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "Vincent Son", email = "107471539+szw0407@users.noreply.github.com"},
+]
+dependencies = [
+    "fastapi[all]>=0.109.0",
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "sqlmodel>=0.0.14",
+]
+requires-python = ">=3.10"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+[tool.pdm]
+distribution = false
