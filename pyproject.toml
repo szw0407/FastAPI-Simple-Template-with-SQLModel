@@ -1,7 +1,7 @@
 [project]
-name = "FastAPI-simple-example"
-version = "0.1.0"
-description = "Default template for PDM package"
+name = "FastAPI-simple-example-with-SQLmodel"
+dynamic = ["version"]
+description = "A simple example of using FastAPI and SQLmodel together. This example is based on the official tutorial of FastAPI and SQLmodel. Used as reference for future projects."
 authors = [
     {name = "Vincent Son", email = "107471539+szw0407@users.noreply.github.com"},
 ]
@@ -14,7 +14,25 @@ dependencies = [
 requires-python = ">=3.10"
 readme = "README.md"
 license = {text = "MIT"}
-
+keywords = ["fastapi", "sqlmodel", "JWT", "authentication", "authorization"]
+entry-points = { console_scripts = { start-server = "main.__main__:main" } }  # bad practice, but it works
 
 [tool.pdm]
-distribution = false
+distribution = true
+
+[tool.pdm.scripts]
+main = "uvicorn main:app --reload"
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[tool.pdm.version]
+source = "scm"
+write_to = "main/_version.py"
+write_template = "__version__ = '{}'"
+
+[tool.pdm.build]
+includes = ["start.sh", "start.ps1", "requirements.txt", "main"]
+excludes = ["__pycache__", "*.pyc", "*.pyo"]
+
