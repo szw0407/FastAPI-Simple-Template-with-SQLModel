@@ -12,6 +12,8 @@ Admins can do all the things that sellers can do, and also can add, update, and 
 
 **WARN**: This is just a simple example, not recommended to directly use in production. You should add more security measures, such as using HTTPS, using a more secure password hashing algorithm, and most importantly, **DO NOT** use the secret key in production same as the one here in the example.
 
+SQLmodel works fine in most cases, but it won't support all features of a database. Use SQLAlchemy when needed. It comes with SQLmodel. 
+
 ## Requirements
 
 - Python >= 3.10
